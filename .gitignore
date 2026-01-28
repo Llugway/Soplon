@@ -1,1 +1,6 @@
 datasets/
+.vs/
+SoplonProject.sln
+SoplonProject.vcxproj
+SoplonProject.vcxproj.filters
+SoplonProject.vcxproj.user
