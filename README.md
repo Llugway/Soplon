@@ -1,9 +1,11 @@
 # Soplon
 
-**Soplon** is a modular C++ application originally developed in 2021 as part of the **Challenge IA & Cyber** organized by the French Directorate General of Armaments (DGA) and the Cyber Excellence Pole.  
+**Soplon** is a modular C++ application developed in 2021 for the **Challenge IA & Cyber 2021**, a national competition organized by the French **Direction Générale de l'Armement (DGA)** and the **Pôle d'Excellence Cyber**.
 It was built by the **Cyberens** team during the competition.
 
-The project demonstrates a clean MVC-inspired architecture for handling data sources, filtering, database interactions, and presentation logic — with a focus on robustness and extensibility in a cybersecurity context.
+The **Cyberens** team secured **2nd place overall**.
+
+The solution demonstrates a clean MVC-inspired architecture for handling data sources, filtering, database interactions, and presentation logic — with a focus on robustness and extensibility in a cybersecurity context.
 
 ## Features
 
@@ -18,7 +20,25 @@ The project demonstrates a clean MVC-inspired architecture for handling data sou
 
 - **Language**: C++ (C++98 compatible)
 - **Build**: CMake
-- Other: JSON config, potential local server/DB setup (`localhost`)
+- **Configuration**: JSON
+- **Other**: Potential local server/DB setup (`localhost`)
+
+## Project Structure
+
+```plaintext
+Soplon/
+├── controllers/       # Request handling & business logic
+├── filters/           # Data validation & processing pipelines
+├── models/            # Core data entities
+├── sources/           # Data ingestion modules
+├── test/              # Unit & integration tests
+├── views/             # Output rendering & presentation
+├── CMakeLists.txt
+├── DbClient.h
+├── config.json
+├── localhost          # Local setup/mocks
+└── main.cc            # Application entry point
+```
 
 ## Getting Started
 
@@ -44,7 +64,7 @@ make
 ./soplon
 ```
 
-## Authors
+## Authors & Acknowledgments
 
 **Cyberens Team**
 - **Bernard Roussely** (CTO)
