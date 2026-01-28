@@ -95,9 +95,13 @@ cmake --build . --config Release
 ```bash
 sudo apt update
 sudo apt install cmake g++ libssl-dev uuid-dev zlib1g-dev libmysqlcppconn8-dev
+
 mkdir build && cd build
+
 cmake ..
 make -j$(nproc)
+
+./soplon
 ```
 
 ## Author
