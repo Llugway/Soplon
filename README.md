@@ -1,15 +1,14 @@
 # Soplon
 
-**Soplon** is a modular C++ web application developed in 2021, initially for the **Challenge IA & Cyber 2021**, a national competition organized by the French **Direction Générale de l'Armement (DGA)** and the **Pôle d'Excellence Cyber**.
-It was built by the **Cyberens** team during the competition.
+**Soplon** is a modular C++ web application developed in 2021 by the **Cyberens** team for the **Challenge IA & Cyber 2021**, a national competition organized by the French **Direction Générale de l'Armement (DGA)** and the **Pôle d'Excellence Cyber**.
 
-The **Cyberens** team secured **2nd place overall**.
+The team achieved **2nd place nationally** and was awarded a **€100,000 development grant** to pursue the project.
 
 The name *Soplon* comes from Spanish *soplón* ("informer" or "snitch") — a subtle nod to discreet anomaly detection and monitoring in cybersecurity.
 
 ## Project Overview
 
-Soplon is **not** the core AI algorithm from the challenge (which focused on code style recognition or similar tasks). Instead, it is a **web interface + backend platform** built on top of the winning solution, designed to:
+Soplon is **not** the core AI algorithm from the challenge (which focused on code style recognition). Instead, it is a **web-based interface + backend platform** built on top of the winning solution, designed to:
 
 - Interact with processed data
 - Visualize big-data problems
@@ -21,6 +20,7 @@ The original vision was to evolve it into a full **big-data visualization and ex
 
 - Model-View-Controller (MVC) architecture powered by **Drogon** (high-performance C++ HTTP framework)
 - Modular components: controllers, models, views, filters and data sources
+- **Multithreading** for efficient parallel processing (ThreadPool, concurrent chunk analysis)
 - Database integration (MariaDB / MySQL via **X DevAPI**)
 - Cross-platform build system with **CMake**
 - JSON configuration support (`config.json`)
