@@ -28,6 +28,7 @@ The solution demonstrates a clean MVC-inspired architecture for handling data so
 ```plaintext
 Soplon/
 ├── controllers/       # Request handling & business logic
+├── datasets/          # Data Folder
 ├── filters/           # Data validation & processing pipelines
 ├── models/            # Core data entities
 ├── sources/           # Data ingestion modules
