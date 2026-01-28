@@ -63,7 +63,6 @@ Soplon/
 ├── views/             # Output rendering & presentation
 ├── CMakeLists.txt
 ├── config.json
-├── localhost          # Local setup/mocks
 └── main.cc            # Application entry point
 ```
 
