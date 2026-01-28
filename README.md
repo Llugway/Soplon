@@ -25,6 +25,23 @@ The original vision was to evolve it into a full **big-data visualization and ex
 - Cross-platform build system with **CMake**
 - JSON configuration support (`config.json`)
 
+## Future Work & Roadmap
+
+Soplon was initially conceived as a **prototype platform** for big-data visualization and interaction in cybersecurity contexts. While the current version is a functional backend + basic interface, several exciting directions remain open for future development:
+
+- **Multi-page modern web interface**  
+  Migrate from basic CSP views to a full single-page application (SPA) using a frontend framework (React, Vue.js, or Svelte) communicating via REST or WebSockets with the Drogon backend.
+
+- **Advanced data modeling & visualization**  
+  Implement rich interactive models (graphs, trees, timelines, heatmaps) for code authorship patterns, authorship clusters, and anomaly detection results.
+
+- **User authentication & multi-user support**  
+  Add login system, role-based access (admin, analyst, viewer), and session management to turn Soplon into a collaborative platform.
+
+- **Machine learning integration**  
+  Expose endpoints to trigger or visualize pre-trained models for code similarity, style classification, or anomaly scoring.
+
+
 ## Tech Stack
 
 - **Language**: C++ (C++98 compatible)
