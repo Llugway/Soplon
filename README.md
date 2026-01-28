@@ -1,27 +1,37 @@
 # Soplon
 
-**Soplon** is a modular C++ application developed in 2021 for the **Challenge IA & Cyber 2021**, a national competition organized by the French **Direction Générale de l'Armement (DGA)** and the **Pôle d'Excellence Cyber**.
+**Soplon** is a modular C++ web application developed in 2021, initially for the **Challenge IA & Cyber 2021**, a national competition organized by the French **Direction Générale de l'Armement (DGA)** and the **Pôle d'Excellence Cyber**.
 It was built by the **Cyberens** team during the competition.
 
 The **Cyberens** team secured **2nd place overall**.
 
-The solution demonstrates a clean MVC-inspired architecture for handling data sources, filtering, database interactions, and presentation logic — with a focus on robustness and extensibility in a cybersecurity context.
+The name *Soplon* comes from Spanish *soplón* ("informer" or "snitch") — a subtle nod to discreet anomaly detection and monitoring in cybersecurity.
+
+## Project Overview
+
+Soplon is **not** the core AI algorithm from the challenge (which focused on code style recognition or similar tasks). Instead, it is a **web interface + backend platform** built on top of the winning solution, designed to:
+
+- Interact with processed data
+- Visualize big-data problems
+- Manage and query results in a structured database
+
+The original vision was to evolve it into a full **big-data visualization and exploration platform** for cybersecurity and code analysis use cases.
 
 ## Features
 
-- Model-View-Controller (MVC) structure for clean separation of concerns
-- Modular components: controllers, models, views, filters, and data sources
-- CMake-based build system
+- Model-View-Controller (MVC) architecture powered by **Drogon** (high-performance C++ HTTP framework)
+- Modular components: controllers, models, views, filters and data sources
+- Database integration (MariaDB / MySQL via **X DevAPI**)
+- Cross-platform build system with **CMake**
 - JSON configuration support (`config.json`)
-- Basic database client interface (`DbClient.h`)
-- Unit/integration test directory (`test/`)
 
 ## Tech Stack
 
 - **Language**: C++ (C++98 compatible)
-- **Build**: CMake
-- **Configuration**: JSON
-- **Other**: Potential local server/DB setup (`localhost`)
+- **Web Framework**: [Drogon](https://github.com/drogonframework/drogon)
+- **Database Client**: MySQL Connector/C++ (X DevAPI)
+- **Build Tool**: CMake
+- **Package Manager**: vcpkg (recommended)
 
 ## Project Structure
 
@@ -35,41 +45,48 @@ Soplon/
 ├── test/              # Unit & integration tests
 ├── views/             # Output rendering & presentation
 ├── CMakeLists.txt
-├── DbClient.h
 ├── config.json
 ├── localhost          # Local setup/mocks
 └── main.cc            # Application entry point
 ```
 
-## Getting Started
+## Build & Run
 
 ### Prerequisites
 - CMake ≥ 3.10
 - C++ compiler (g++ / clang++)
+- vcpkg (recommended) or system packages
 
-### Build & Run
+### Windows (vcpkg)
 
 ```bash
-# Clone the repo
+vcpkg install drogon mysql-connector-cpp:x64-windows
+
 git clone https://github.com/Llugway/Soplon.git
 cd Soplon
 
-# Create build directory
 mkdir build && cd build
 
-# Configure & build
 cmake ..
-make
+cmake --build . --config Release
 
 # Run 
 ./soplon
 ```
 
-## Authors & Acknowledgments
+### Linux ()
 
-**Cyberens Team**
-- **Bernard Roussely** (CTO)
-- **Antonin Lerouge** (Developer)
+```bash
+sudo apt update
+sudo apt install cmake g++ libssl-dev uuid-dev zlib1g-dev libmysqlcppconn8-dev
+mkdir build && cd build
+cmake ..
+make -j$(nproc)
+```
+
+## Author
+
+**Antonin Lerouge** (Developer)
 
 ## License
 

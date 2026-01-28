@@ -6,14 +6,15 @@ include(CheckIncludeFileCXX)
 check_include_file_cxx(any HAS_ANY)
 check_include_file_cxx(string_view HAS_STRING_VIEW)
 check_include_file_cxx(coroutine HAS_COROUTINE)
-if (NOT "${CMAKE_CXX_STANDARD}" STREQUAL "")
-    # Do nothing
-elseif (HAS_ANY AND HAS_STRING_VIEW AND HAS_COROUTINE)
-    set(CMAKE_CXX_STANDARD 20)
-elseif (HAS_ANY AND HAS_STRING_VIEW)
-    set(CMAKE_CXX_STANDARD 17)
-else ()
-    set(CMAKE_CXX_STANDARD 14)
+
+if (NOT DEFINED CMAKE_CXX_STANDARD)
+    if (HAS_ANY AND HAS_STRING_VIEW AND HAS_COROUTINE)
+        set(CMAKE_CXX_STANDARD 20)
+    elseif (HAS_ANY AND HAS_STRING_VIEW)
+        set(CMAKE_CXX_STANDARD 17)
+    else ()
+        set(CMAKE_CXX_STANDARD 14)
+    endif ()
 endif ()
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -21,97 +22,59 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_executable(${PROJECT_NAME} main.cc)
 
-# ##############################################################################
-# If you include the drogon source code locally in your project, use this method
-# to add drogon 
-# add_subdirectory(drogon) 
-# target_link_libraries(${PROJECT_NAME} PRIVATE drogon)
-#
-# and comment out the following lines
+
+# vcpkg ou system packages
 find_package(Drogon CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE Drogon::Drogon)
 
-# ##############################################################################
+# MySQL X DevAPI (via vcpkg ou system)
+find_package(unofficial-mysql-connector-cpp CONFIG QUIET)
+if (unofficial-mysql-connector-cpp_FOUND)
+    target_link_libraries(${PROJECT_NAME} PRIVATE unofficial::mysql-connector-cpp::connector)
+else ()
+    # Linux fallback (apt install libmysqlcppconn8-dev)
+    find_package(PkgConfig QUIET)
+    if (PkgConfig_FOUND)
+        pkg_check_modules(MYSQLX REQUIRED IMPORTED_TARGET mysqlcppconn8)
+        target_link_libraries(${PROJECT_NAME} PRIVATE PkgConfig::MYSQLX)
+    else ()
+        message(FATAL_ERROR "MySQL X DevAPI not found - install via vcpkg or apt")
+    endif ()
+endif ()
 
+# Boost pour C++14 fallback
 if (CMAKE_CXX_STANDARD LESS 17)
-    # With C++14, use boost to support any, string_view and filesystem
-    message(STATUS "use c++14")
+    message(STATUS "Using Boost for C++14 compatibility")
     find_package(Boost 1.61.0 REQUIRED)
     target_link_libraries(${PROJECT_NAME} PUBLIC Boost::boost)
 elseif (CMAKE_CXX_STANDARD LESS 20)
-    message(STATUS "use c++17")
+    message(STATUS "Using C++17")
 else ()
-    message(STATUS "use c++20")
+    message(STATUS "Using C++20")
 endif ()
 
+# Sources Drogon
 aux_source_directory(controllers CTL_SRC)
 aux_source_directory(filters FILTER_SRC)
 aux_source_directory(plugins PLUGIN_SRC)
 aux_source_directory(models MODEL_SRC)
 aux_source_directory(sources SOPLON_SRC)
 
-drogon_create_views(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/views
-                    ${CMAKE_CURRENT_BINARY_DIR})
-# use the following line to create views with namespaces.
-# drogon_create_views(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/views
-#                     ${CMAKE_CURRENT_BINARY_DIR} TRUE)
-# use the following line to create views with namespace CHANGE_ME prefixed
-# and path namespaces.
-# drogon_create_views(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/views
-#                     ${CMAKE_CURRENT_BINARY_DIR} TRUE CHANGE_ME)
+drogon_create_views(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/views ${CMAKE_CURRENT_BINARY_DIR})
 
 target_include_directories(${PROJECT_NAME}
-                           PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
-                                   ${CMAKE_CURRENT_SOURCE_DIR}/models)
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/models
+)
 
 target_sources(${PROJECT_NAME}
-               PRIVATE
-               ${SRC_DIR}
-               ${CTL_SRC}
-               ${FILTER_SRC}
-               ${PLUGIN_SRC}
-               ${MODEL_SRC}
-	       ${SOPLON_SRC})
-# ##############################################################################
-# uncomment the following line for dynamically loading views 
-# set_property(TARGET ${PROJECT_NAME} PROPERTY ENABLE_EXPORTS ON)
-
-# ##############################################################################
+    PRIVATE
+        ${CTL_SRC}
+        ${FILTER_SRC}
+        ${PLUGIN_SRC}
+        ${MODEL_SRC}
+        ${SOPLON_SRC}
+)
 
 add_subdirectory(test)
-
-#FILE(GLOB SCP_LIST ${CMAKE_CURRENT_SOURCE_DIR}/views/*.csp)
-#foreach(cspFile ${SCP_LIST})
-#	message(STATUS "cspFile:" ${cspFile})
-#	EXEC_PROGRAM(basename ARGS "-s .csp ${cspFile}" OUTPUT_VARIABLE classname)
-#	message(STATUS "view classname:" ${classname}.cc)
-#"	add_custom_command(OUTPUT ${classname}.h ${classname}.cc
-#		COMMAND drogon_ctl
-#		ARGS create view ${cspFile}
-#		DEPENDS ${cspFile}
-#		VERBATIM )
-#	set(VIEWSRC ${VIEWSRC} &{classname}.cc)
-#endforeach()
-
-
-# Custom add_executable
-
-#add_executable(webapp ${SRC_DIR} ${VIEWSRC})
-
-#set(MARIADBCPP_LIBRARY "lmariadbcpp")
-#find_package(mariadbcpp)
-#target_include_directories(${PROJECT_NAME} PRIVATE ${MARIADBCPP_INCLUDE_DIR})
-#target_link_libraries(${PROJECT_NAME} PRIVATE ${MARIADB_LIBRARIES})
-
-SET(INSTALL_PLUGINDIR ${CMAKE_BINARY_DIR})
-include_directories(usr/include/mariadb)
-#add_subdirectories(/usr/include/mariadb EXCLUDE_FROM_ALL)
-
-target_link_libraries(${PROJECT_NAME} PRIVATE mariadbcpp)
-target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ${CMAKE_SOURCE_DIR}/include/mariadb)
-target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ${CMAKE_BINARY_DIR}/libs/include/mariadb)
-
-
-#add_library(mariadbcpp STATIS IMPORTED)
-#set_property(TARGET mariadbcpp PROPERTY IMPORTED_LOCATION "/usr/lib/libmariadbcpp.so")
-

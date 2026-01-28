@@ -13,7 +13,7 @@
 #include "ThreadPool.h"
 #include <sstream>
 #include <filesystem>
-#include <unistd.h>
+#include "platform.h"
 
 namespace fs = std::filesystem;
 

@@ -39,7 +39,7 @@ int main() {
 
     drogon::HttpAppFramework::instance().enableSession(1200);
     
-    drogon::app().createDbClient("mysql","127.0.0.1",3306,"Soplon","root","root", true);
+    // drogon::app().createDbClient("mysql","127.0.0.1",3306,"Soplon","root","root", true);
 
     drogon::app().run();
 

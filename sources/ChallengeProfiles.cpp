@@ -64,8 +64,7 @@ ChallengeProfiles::ChallengeProfiles(Treatment t)
         //                    break;
         try {
             for (const auto& p : t) {
-                database->getStatement()->execute(request + p);
-                database->conn->commit();
+                database->executeSQL(request + p);
             }
         }
         catch (const std::exception& e) {
@@ -245,8 +244,7 @@ void ChallengeProfiles::setUpAuthorsCode(std::string path)
         }
     }
 
-    database->getStatement()->execute(request);
-    database->conn->commit();
+    database->executeSQL(request);
 
     std::ifstream chunksByFileSave;
     std::string filename;
@@ -723,8 +721,7 @@ void ChallengeProfiles::backupDenoms(std::string path) {
             }
             else if (count % 999 == 998 ) {
                 inter += ", ('" + std::to_string(count) + "','" + denom + "')";
-                database->getStatement()->execute(baseRequest + inter);
-                database->conn->commit();
+                database->executeSQL(baseRequest + inter);
                 inter = "";
             }
             else
@@ -735,8 +732,7 @@ void ChallengeProfiles::backupDenoms(std::string path) {
         }
 
         if (count % 999 != 998) {
-            database->getStatement()->execute(baseRequest + inter);
-            database->conn->commit();
+            database->executeSQL(baseRequest + inter);
         }
 
         if (count_link % 999 != 0) {
@@ -744,8 +740,7 @@ void ChallengeProfiles::backupDenoms(std::string path) {
         }
 
         for (std::string s : reqs) {
-            database->getStatement()->execute(s);
-            database->conn->commit();
+            database->executeSQL(s);
         }
 
         file.close();
@@ -1800,8 +1795,7 @@ void ChallengeProfiles::FillDatabase()
         for (const auto& elem : chunksByFile[i]) {
             if ((count != 0 && count % 999 == 0) || count == filesUsed.size() - 1) {
                 inter += "('" + std::to_string(i) + "', '" + std::to_string(elem.first.first) + "', '" + std::to_string(elem.first.second) + "', NULL, '" + std::to_string(elem.second) + "')";
-                database->getStatement()->execute(request + inter);
-                database->conn->commit();
+                database->executeSQL(request + inter);
                 inter = "";
                 count = 0;
             }
@@ -1836,8 +1830,7 @@ void ChallengeProfiles::discoverDataset(std::string basePath)
         if ((i != 0 && i % 999 == 0) || i == fileId.size() - 1) {
             inter += "('" + std::to_string(p.second) + "', '" + p.first + "', NULL);";
             std::string request = baseRequest + inter;
-            database->getStatement()->execute(request);
-            database->conn->commit();
+            database->executeSQL(request);
             inter = "";
         }
         else {
@@ -2012,8 +2005,7 @@ void ChallengeProfiles::insertThread(SoplonDatabase* db, unsigned int index)
 
         inter = request + "(" + std::to_string(i) + ")";
 
-        db->getStatement()->execute(inter);
-        db->conn->commit();
+        database->executeSQL(inter);
     }
 }
 
