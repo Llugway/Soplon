@@ -104,9 +104,11 @@ make -j$(nproc)
 ./soplon
 ```
 
-## Author
+## Credits & Acknowledgments
 
-**Antonin Lerouge** (Developer)
+**This application was fully coded by Antonin Lerouge.**  
+The success of the project — including the **2nd place** ranking at Challenge IA & Cyber 2021 — was largely thanks to the vision, technical leadership, and strategic guidance of **Bernard Roussely** (CTO of Cyberens).
+
 
 ## License
 
