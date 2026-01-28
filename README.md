@@ -50,6 +50,6 @@ make
 - **Bernard Roussely** (CTO)
 - **Antonin Lerouge** (Developer)
 
-### License
+## License
 
 MIT License
